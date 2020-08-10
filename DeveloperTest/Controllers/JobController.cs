@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using DeveloperTest.Business.Interfaces;
 using DeveloperTest.Models;
+using System.Collections.Generic;
+using DeveloperTest.Database.Models;
 
 namespace DeveloperTest.Controllers
 {

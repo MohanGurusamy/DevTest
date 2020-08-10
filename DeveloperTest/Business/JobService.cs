@@ -21,7 +21,9 @@ namespace DeveloperTest.Business
             {
                 JobId = x.JobId,
                 Engineer = x.Engineer,
-                When = x.When
+                When = x.When,
+                CustomerName = x.Customer.Name,
+                CustomerType = x.Customer.CustomerType.Name
             }).ToArray();
         }
 
@@ -31,26 +33,33 @@ namespace DeveloperTest.Business
             {
                 JobId = x.JobId,
                 Engineer = x.Engineer,
-                When = x.When
+                When = x.When,
+                CustomerName = x.Customer.Name,
+                CustomerType = x.Customer.CustomerType.Name
             }).SingleOrDefault();
         }
 
         public JobModel CreateJob(BaseJobModel model)
         {
-            var addedJob = context.Jobs.Add(new Job
+            var newJob = context.Jobs.Add(new Job
             {
                 Engineer = model.Engineer,
-                When = model.When
+                When = model.When,
+                CustomerId = model.CustomerId
             });
 
             context.SaveChanges();
-
-            return new JobModel
-            {
-                JobId = addedJob.Entity.JobId,
-                Engineer = addedJob.Entity.Engineer,
-                When = addedJob.Entity.When
-            };
+            var id = newJob.Entity.JobId;
+            return context.Jobs.Where(x => x.JobId == id)
+                .Select(x => new JobModel
+                {
+                    JobId = x.JobId,
+                    CustomerName = x.Customer.Name,
+                    CustomerType = x.Customer.CustomerType.Name,
+                    Engineer = x.Engineer,
+                    When = x.When
+                })
+                .Single();
         }
     }
 }
